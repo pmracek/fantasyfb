@@ -1,0 +1,24 @@
+SEASON,SCORINGPERIOD,WEEK_NM,AUCTIONDATE,TEAM,TEAMNAME,PLAYERID,PLAYERNAME,BID,BIDRESULT
+2016,2,2,20160915,1,Scott,17834,Michael Thomas,31,Added
+2016,2,2,20160915,1,Scott,17762,Tyrell Williams,21,Unsuccessful
+2016,2,2,20160915,6,Jeremy,17679,Kwon Alexander,16,Added
+2016,2,2,20160915,1,Scott,15853,Vance McDonald,15,Added
+2016,2,2,20160915,7,Kyle,17679,Kwon Alexander,9,Unsuccessful
+2016,2,2,20160915,8,Thomas,17679,Kwon Alexander,8,Unsuccessful
+2016,2,2,20160915,3,JMT,12601,Mike Wallace,8,Added
+2016,2,2,20160915,7,Kyle,14023,Mason Foster,7,Added
+2016,2,2,20160915,10,Goss,17762,Tyrell Williams,7,Added
+2016,2,2,20160915,1,Scott,12601,Mike Wallace,6,Unsuccessful
+2016,2,2,20160915,7,Kyle,14023,Mason Foster,5,Unsuccessful
+2016,2,2,20160915,7,Kyle,60015,Dolphins D/ST,5,Added
+2016,2,2,20160915,9,Schwartz,12601,Mike Wallace,5,Unsuccessful
+2016,2,2,20160915,8,Thomas,15966,Chris Thompson,4,Added
+2016,2,2,20160915,12,Paul,11252,Joe Flacco,4,Added
+2016,2,2,20160915,8,Thomas,17669,Leonard Williams,3,Added
+2016,2,2,20160915,8,Thomas,18037,Eli Rogers,3,Added
+2016,2,2,20160915,3,JMT,14941,Fletcher Cox,2,Added
+2016,2,2,20160915,6,Jeremy,17669,Leonard Williams,2,Unsuccessful
+2016,2,2,20160915,8,Thomas,10481,Eric Weddle,0,Added
+2016,2,2,20160915,1,Scott,16800,Davante Adams,0,Unsuccessful
+2016,2,2,20160915,9,Schwartz,60003,Bears D/ST,0,Added
+2016,2,2,20160918,5,Tim,17908,Devontae Booker,13,Added

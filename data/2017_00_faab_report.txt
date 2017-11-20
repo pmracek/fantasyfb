@@ -1,0 +1,16 @@
+SEASON,SCORINGPERIOD,WEEK_NM,AUCTIONDATE,TEAM,TEAMNAME,PLAYERID,PLAYERNAME,BID,BIDRESULT
+2017,0,0,20170830,1,Scott,60029,Panthers D/ST,2,Added
+2017,0,0,20170830,4,JJ,60029,Panthers D/ST,1,Unsuccessful
+2017,0,0,20170830,5,Tim,17616,Javorius Allen,0,Added
+2017,0,0,20170830,5,Tim,10621,Nick Folk,0,Added
+2017,0,0,20170830,5,Tim,18181,De'Angelo Henderson,0,Unsuccessful
+2017,0,0,20170830,5,Tim,15965,Dustin Hopkins,0,Unsuccessful
+2017,0,0,20170830,5,Tim,11122,Matt Prater,0,Unsuccessful
+2017,0,0,20170830,6,Jeremy,9424,Lorenzo Alexander,0,Added
+2017,0,0,20170830,6,Jeremy,18097,Robby Anderson,0,Added
+2017,0,0,20170830,6,Jeremy,17177,Taylor Gabriel,0,Unsuccessful
+2017,0,0,20170830,11,Tony,60029,Panthers D/ST,0,Unsuccessful
+2017,0,0,20170830,7,Kyle,15839,Marquise Goodwin,0,Added
+2017,0,0,20170830,7,Kyle,17827,Sterling Shepard,0,Unsuccessful
+2017,0,0,20170830,7,Kyle,18415,Cooper Kupp,0,Unsuccessful
+2017,0,0,20170901,5,Tim,60001,Falcons D/ST,1,Added

@@ -1,0 +1,24 @@
+SEASON,SCORINGPERIOD,WEEK_NM,AUCTIONDATE,TEAM,TEAMNAME,PLAYERID,PLAYERNAME,BID,BIDRESULT
+2017,8,8,20171026,9,Schwartz,18079,Jalen Richard,22,Added
+2017,8,8,20171026,6,Jeremy,17650,Tyler Kroft,8,Added
+2017,8,8,20171026,8,Thomas,14816,Kai Forbath,5,Added
+2017,8,8,20171026,8,Thomas,16734,Jadeveon Clowney,5,Added
+2017,8,8,20171026,3,JMT,18409,Harrison Butker,3,Added
+2017,8,8,20171026,9,Schwartz,14958,Demario Davis,3,Added
+2017,8,8,20171026,8,Thomas,16039,Jahleel Addae,2,Added
+2017,8,8,20171026,5,Tim,17468,Vic Beasley Jr.,2,Added
+2017,8,8,20171026,3,JMT,13973,Ryan Kerrigan,1,Added
+2017,8,8,20171026,5,Tim,12716,Glover Quin,0,Added
+2017,8,8,20171026,10,Goss,18409,Harrison Butker,0,Unsuccessful
+2017,8,8,20171026,12,Paul,15839,Marquise Goodwin,0,Added
+2017,8,8,20171026,12,Paul,15074,Danny Trevathan,0,Added
+2017,8,8,20171026,12,Paul,18190,Jarrad Davis,0,Unsuccessful
+2017,8,8,20171026,7,Kyle,16039,Jahleel Addae,0,Unsuccessful
+2017,8,8,20171026,7,Kyle,16039,Jahleel Addae,0,Unsuccessful
+2017,8,8,20171026,7,Kyle,12537,Jared Cook,0,Added
+2017,8,8,20171026,7,Kyle,16016,Kenny Stills,0,Added
+2017,8,8,20171026,7,Kyle,14816,Kai Forbath,0,Unsuccessful
+2017,8,8,20171027,5,Tim,60001,Falcons D/ST,0,Added
+2017,8,8,20171027,12,Paul,60001,Falcons D/ST,0,Unsuccessful
+2017,8,8,20171028,12,Paul,60023,Steelers D/ST,3,Added
+2017,8,8,20171028,5,Tim,60023,Steelers D/ST,0,Unsuccessful

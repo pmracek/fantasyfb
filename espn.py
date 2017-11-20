@@ -5,37 +5,40 @@ from selenium.webdriver.support.ui import WebDriverWait # available since 2.4.0
 from selenium.webdriver.support import expected_conditions as EC # available since 2.26.0
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
+from datetime import datetime
+import requests
 
-def getdriver():
+def getdriver_v1():
 	driver = webdriver.Chrome(r'C:\Users\PM186016\Dropbox\Python\selenium\webdriver\chrome2.33\chromedriver')
-
-	
 	
 	driver.get("http://games.espn.com/ffl/leagueoffice?leagueId=111414&seasonId=2016")
 	
 	input("Press Enter to continue...")
 
-	#driver.get("http://games.espn.go.com/ffl/signin")
-	
-	
-	#implement wait it is mandatory in this case
-	#WebDriverWait(driver,1000).until(EC.presence_of_all_elements_located((By.XPATH,"(//iframe)")))
-	#frms = driver.find_elements_by_tag_name("iframe")
-    #
-	#for i in range(len(frms)):
-	#	driver.switch_to_default_content()
-	#	#time.sleep(1)
-	#	try:
-	#		driver.switch_to_frame(frms[i])
-	#		#time.sleep(1)
-	#		driver.find_element_by_xpath('(//input[@type="email"])').send_keys("pmracek@gmail.com")
-	#		driver.find_element_by_xpath('(//input[@type="password"])').send_keys("aissaj")
-	#		driver.find_element_by_xpath("//button").click()
-	#		break
-	#	except:
-	#		pass
-	
 	return driver
+	
+
+def getdriver(leagueId=None,season=None):
+    if leagueId is None:
+        leagueId = '111414'	#todo config
+    if season is None:
+        season = datetime.now().year - 1		#todo config/current year
+    
+    
+    driver = webdriver.Chrome(r'C:\Users\PM186016\Dropbox\Python\selenium\webdriver\chrome2.33\chromedriver') #todo config rel path
+
+    leagueUrl = "http://games.espn.com/ffl/leagueoffice?leagueId="+str(leagueId)+"&seasonId="+str(season)
+    
+    driver.get(leagueUrl)
+
+    input("Press Enter to continue...")
+
+    s = requests.Session()
+    cookies = driver.get_cookies()
+    for cookie in cookies:
+        s.cookies.set(cookie['name'], cookie['value'])
+
+    return driver, s
 	
 	
 def class_not_spacer(tag):

@@ -1,0 +1,59 @@
+SEASON,SCORINGPERIOD,WEEK_NM,AUCTIONDATE,TEAM,TEAMNAME,PLAYERID,PLAYERNAME,BID,BIDRESULT
+2017,5,5,20171005,2,Brent,15920,Latavius Murray,93,Added
+2017,5,5,20171005,4,JJ,15920,Latavius Murray,64,Unsuccessful
+2017,5,5,20171005,1,Scott,15920,Latavius Murray,51,Unsuccessful
+2017,5,5,20171005,3,JMT,18314,Aaron Jones,37,Added
+2017,5,5,20171005,6,Jeremy,17809,Will Fuller V,32,Added
+2017,5,5,20171005,9,Schwartz,15920,Latavius Murray,31,Unsuccessful
+2017,5,5,20171005,10,Goss,17809,Will Fuller V,18,Unsuccessful
+2017,5,5,20171005,12,Paul,15920,Latavius Murray,15,Unsuccessful
+2017,5,5,20171005,3,JMT,17784,Cameron Brate,11,Added
+2017,5,5,20171005,9,Schwartz,17784,Cameron Brate,11,Unsuccessful
+2017,5,5,20171005,10,Goss,15920,Latavius Murray,11,Unsuccessful
+2017,5,5,20171005,12,Paul,17933,Alex Collins,10,Added
+2017,5,5,20171005,2,Brent,60008,Lions D/ST,9,Added
+2017,5,5,20171005,4,JJ,60002,Bills D/ST,7,Added
+2017,5,5,20171005,12,Paul,17159,Telvin Smith,7,Added
+2017,5,5,20171005,6,Jeremy,17619,Tyler Lockett,6,Unsuccessful
+2017,5,5,20171005,4,JJ,14993,Greg Zuerlein,6,Added
+2017,5,5,20171005,4,JJ,17650,Tyler Kroft,6,Added
+2017,5,5,20171005,10,Goss,15848,Eddie Lacy,6,Added
+2017,5,5,20171005,1,Scott,18314,Aaron Jones,6,Unsuccessful
+2017,5,5,20171005,3,JMT,60008,Lions D/ST,4,Unsuccessful
+2017,5,5,20171005,9,Schwartz,17809,Will Fuller V,4,Unsuccessful
+2017,5,5,20171005,12,Paul,17784,Cameron Brate,4,Unsuccessful
+2017,5,5,20171005,3,JMT,14993,Greg Zuerlein,3,Unsuccessful
+2017,5,5,20171005,12,Paul,17870,Jacoby Brissett,3,Added
+2017,5,5,20171005,12,Paul,17870,Jacoby Brissett,3,Unsuccessful
+2017,5,5,20171005,12,Paul,17794,Jared Goff,3,Unsuccessful
+2017,5,5,20171005,12,Paul,17794,Jared Goff,3,Added
+2017,5,5,20171005,10,Goss,60020,Jets D/ST,3,Added
+2017,5,5,20171005,5,Tim,60020,Jets D/ST,2,Unsuccessful
+2017,5,5,20171005,9,Schwartz,5557,Benjamin Watson,2,Added
+2017,5,5,20171005,4,JJ,17159,Telvin Smith,2,Unsuccessful
+2017,5,5,20171005,1,Scott,11122,Matt Prater,2,Added
+2017,5,5,20171005,1,Scott,18233,Wayne Gallman,2,Added
+2017,5,5,20171005,1,Scott,60020,Jets D/ST,2,Unsuccessful
+2017,5,5,20171005,1,Scott,17159,Telvin Smith,2,Unsuccessful
+2017,5,5,20171005,3,JMT,3530,Julius Peppers,1,Added
+2017,5,5,20171005,12,Paul,3609,Josh McCown,1,Unsuccessful
+2017,5,5,20171005,12,Paul,12477,Brian Hoyer,1,Unsuccessful
+2017,5,5,20171005,12,Paul,14012,Andy Dalton,1,Unsuccessful
+2017,5,5,20171005,12,Paul,5362,Antonio Gates,1,Added
+2017,5,5,20171005,12,Paul,11122,Matt Prater,1,Unsuccessful
+2017,5,5,20171005,12,Paul,18178,Jake Elliott,1,Added
+2017,5,5,20171005,10,Goss,18178,Jake Elliott,1,Unsuccessful
+2017,5,5,20171005,5,Tim,11122,Matt Prater,0,Unsuccessful
+2017,5,5,20171005,5,Tim,18178,Jake Elliott,0,Unsuccessful
+2017,5,5,20171005,5,Tim,60015,Dolphins D/ST,0,Added
+2017,5,5,20171005,12,Paul,17809,Will Fuller V,0,Unsuccessful
+2017,5,5,20171005,12,Paul,12699,Zach Miller,0,Added
+2017,5,5,20171005,12,Paul,18168,Mitchell Trubisky,0,Unsuccessful
+2017,5,5,20171005,7,Kyle,17809,Will Fuller V,0,Unsuccessful
+2017,5,5,20171005,7,Kyle,16172,Jaron Brown,0,Added
+2017,5,5,20171005,1,Scott,60025,49ers D/ST,0,Added
+2017,5,5,20171007,12,Paul,17690,Jesse James,4,Added
+2017,5,5,20171007,8,Thomas,14322,Dan Bailey,2,Added
+2017,5,5,20171007,1,Scott,60021,Eagles D/ST,0,Added
+2017,5,5,20171008,12,Paul,17861,Austin Hooper,2,Added
+2017,5,5,20171008,8,Thomas,60019,Giants D/ST,1,Added

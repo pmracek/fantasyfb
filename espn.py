@@ -6,41 +6,62 @@ from selenium.webdriver.support import expected_conditions as EC # available sin
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
 from datetime import datetime
+import configparser
 import requests
+import re
 
-def getdriver_v1():
-	driver = webdriver.Chrome(r'C:\Users\PM186016\Dropbox\Python\selenium\webdriver\chrome2.33\chromedriver')
-	
-	driver.get("http://games.espn.com/ffl/leagueoffice?leagueId=111414&seasonId=2016")
-	
-	input("Press Enter to continue...")
+config = configparser.ConfigParser()
+config.read_file(open('fantasyfb.ini'))
 
-	return driver
-	
-
+#Use Selenium ChromeDriver to login to ESPN angular-js form buried in an iframe.  
+#Then move logged in cookies to a requests session and return both handles.
 def getdriver(leagueId=None,season=None):
+    
     if leagueId is None:
-        leagueId = '111414'	#todo config
+        leagueId = config.get('main', 'leagueId') if config.has_option('main', 'leagueId') else '111414'
+        
     if season is None:
-        season = datetime.now().year - 1		#todo config/current year
+        season = config.get('main', 'season') if config.has_option('main', 'season') else datetime.now().year - 1          
     
+    driver = webdriver.Chrome(config['main']['chromedriverexe'])
+
+    driver.get("http://games.espn.go.com/ffl/signin")
+    #implement wait it is mandatory in this case
+    WebDriverWait(driver,1000).until(EC.presence_of_all_elements_located((By.XPATH,"(//iframe)")))
+    frms = driver.find_elements_by_tag_name("iframe")
+
     
-    driver = webdriver.Chrome(r'C:\Users\PM186016\Dropbox\Python\selenium\webdriver\chrome2.33\chromedriver') #todo config rel path
-
-    leagueUrl = "http://games.espn.com/ffl/leagueoffice?leagueId="+str(leagueId)+"&seasonId="+str(season)
-    
-    driver.get(leagueUrl)
-
-    input("Press Enter to continue...")
-
+    for i in range(len(frms)):
+        driver.switch_to.default_content()
+        #time.sleep(1)
+        
+        try:
+            driver.switch_to.frame(frms[i])            
+            driver.find_element_by_xpath('(//input[@type="email"])').send_keys(config['main']['username'])
+            driver.find_element_by_xpath('(//input[@type="password"])').send_keys(config['main']['password'])            
+            driver.find_element_by_class_name("btn-submit").click()            
+            break
+        except:
+            pass
+        
     s = requests.Session()
     cookies = driver.get_cookies()
     for cookie in cookies:
         s.cookies.set(cookie['name'], cookie['value'])
 
     return driver, s
+
+def getsession(leagueId=None,season=None):
+	if leagueId is None:
+		leagueId = config.get('main', 'leagueId') if config.has_option('main', 'leagueId') else '111414'        
+	if season is None:
+		season = config.get('main', 'season') if config.has_option('main', 'season') else datetime.now().year - 1          
+	d,s = getdriver(leagueId,season)
+	d.quit()
+	return s
 	
 	
 def class_not_spacer(tag):
 	return not tag.has_attr('class') or (tag.has_attr('class') and not re.match("sectionLeadingSpacer", ' '.join(tag['class'])))  # have to use the ' '.join() syntax because tag['class'] is actually a list
+
 

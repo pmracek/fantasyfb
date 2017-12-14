@@ -1,0 +1,5 @@
+[main]
+username=username
+password=password
+leagueId=leagueid
+chromedriverexe=C:\Users\path\to\exe\chromedriver

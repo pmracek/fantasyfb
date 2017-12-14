@@ -4,3 +4,4 @@ data/tmp/*
 .~espn.py
 espn.ipynb
 fd_results.ipynb
+*.ini

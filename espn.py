@@ -15,6 +15,22 @@ config.read_file(open('fantasyfb.ini'))
 
 #Use Selenium ChromeDriver to login to ESPN angular-js form buried in an iframe.  
 #Then move logged in cookies to a requests session and return both handles.
+from selenium import webdriver
+from selenium.common.exceptions import TimeoutException
+from selenium.common.exceptions import NoSuchElementException
+from selenium.webdriver.support.ui import WebDriverWait # available since 2.4.0
+from selenium.webdriver.support import expected_conditions as EC # available since 2.26.0
+from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.common.by import By
+from datetime import datetime
+import configparser
+import requests
+
+config = configparser.ConfigParser()
+config.read_file(open('fantasyfb.ini'))
+
+#Use Selenium ChromeDriver to login to ESPN angular-js form buried in an iframe.  
+#Then move logged in cookies to a requests session and return both handles.
 def getdriver(leagueId=None,season=None):
     
     if leagueId is None:
@@ -23,7 +39,8 @@ def getdriver(leagueId=None,season=None):
     if season is None:
         season = config.get('main', 'season') if config.has_option('main', 'season') else datetime.now().year - 1          
     
-    driver = webdriver.Chrome(config['main']['chromedriverexe'])
+    #driver = webdriver.Chrome(config['main']['chromedriverexe'])
+    driver = webdriver.Safari()
 
     driver.get("http://games.espn.go.com/ffl/signin")
     #implement wait it is mandatory in this case
@@ -50,6 +67,8 @@ def getdriver(leagueId=None,season=None):
         s.cookies.set(cookie['name'], cookie['value'])
 
     return driver, s
+
+
 
 def getsession(leagueId=None,season=None):
 	if leagueId is None:

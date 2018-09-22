@@ -1,0 +1,52 @@
+SEASON,SCORINGPERIOD,WEEK_NM,AUCTIONDATE,TEAM,TEAMNAME,PLAYERID,PLAYERNAME,BID,BIDRESULT
+2018,2,2,20180913,1,Scott,18823,Phillip Lindsay,38,Added
+2018,2,2,20180913,11,Tony,18823,Phillip Lindsay,33,Unsuccessful
+2018,2,2,20180913,2,Brent,18823,Phillip Lindsay,33,Unsuccessful
+2018,2,2,20180913,12,Paul,18823,Phillip Lindsay,27,Unsuccessful
+2018,2,2,20180913,9,Schwartz,18823,Phillip Lindsay,25,Unsuccessful
+2018,2,2,20180913,4,JJ,18823,Phillip Lindsay,23,Unsuccessful
+2018,2,2,20180913,7,Kyle,18823,Phillip Lindsay,23,Unsuccessful
+2018,2,2,20180913,4,JJ,10453,Ted Ginn Jr.,21,Added
+2018,2,2,20180913,3,JMT,18823,Phillip Lindsay,19,Unsuccessful
+2018,2,2,20180913,3,JMT,12537,Jared Cook,17,Added
+2018,2,2,20180913,7,Kyle,17758,Quincy Enunwa,16,Added
+2018,2,2,20180913,5,Tim,17758,Quincy Enunwa,14,Unsuccessful
+2018,2,2,20180913,7,Kyle,12537,Jared Cook,14,Unsuccessful
+2018,2,2,20180913,5,Tim,18823,Phillip Lindsay,13,Unsuccessful
+2018,2,2,20180913,5,Tim,18663,Nyheim Hines,13,Added
+2018,2,2,20180913,1,Scott,12537,Jared Cook,12,Unsuccessful
+2018,2,2,20180913,10,Goss,18823,Phillip Lindsay,10,Unsuccessful
+2018,2,2,20180913,12,Paul,10453,Ted Ginn Jr.,10,Unsuccessful
+2018,2,2,20180913,12,Paul,17643,Phillip Dorsett,10,Added
+2018,2,2,20180913,1,Scott,17758,Quincy Enunwa,9,Unsuccessful
+2018,2,2,20180913,5,Tim,60028,Redskins D/ST,8,Added
+2018,2,2,20180913,11,Tony,18663,Nyheim Hines,8,Unsuccessful
+2018,2,2,20180913,2,Brent,10453,Ted Ginn Jr.,8,Unsuccessful
+2018,2,2,20180913,7,Kyle,16732,Eric Ebron,8,Added
+2018,2,2,20180913,5,Tim,17643,Phillip Dorsett,7,Unsuccessful
+2018,2,2,20180913,5,Tim,18110,Geronimo Allison,6,Added
+2018,2,2,20180913,1,Scott,18110,Geronimo Allison,6,Unsuccessful
+2018,2,2,20180913,7,Kyle,18183,Jonnu Smith,6,Added
+2018,2,2,20180913,10,Goss,9705,Brandon Marshall,5,Added
+2018,2,2,20180913,3,JMT,17758,Quincy Enunwa,5,Unsuccessful
+2018,2,2,20180913,7,Kyle,9705,Brandon Marshall,5,Unsuccessful
+2018,2,2,20180913,7,Kyle,9705,Brandon Marshall,5,Unsuccessful
+2018,2,2,20180913,5,Tim,18244,T.J. Watt,4,Added
+2018,2,2,20180913,2,Brent,12537,Jared Cook,4,Unsuccessful
+2018,2,2,20180913,4,JJ,18337,John Johnson III,3,Added
+2018,2,2,20180913,1,Scott,17643,Phillip Dorsett,3,Unsuccessful
+2018,2,2,20180913,6,Jeremy,17643,Phillip Dorsett,3,Unsuccessful
+2018,2,2,20180913,3,JMT,17799,DeForest Buckner,2,Added
+2018,2,2,20180913,2,Brent,15934,Vince Williams,2,Added
+2018,2,2,20180913,2,Brent,15168,Case Keenum,2,Added
+2018,2,2,20180913,10,Goss,8664,Ryan Fitzpatrick,1,Added
+2018,2,2,20180913,2,Brent,18085,Brian Poole,1,Added
+2018,2,2,20180913,5,Tim,18337,John Johnson III,0,Unsuccessful
+2018,2,2,20180913,4,JJ,18110,Geronimo Allison,0,Unsuccessful
+2018,2,2,20180913,7,Kyle,15168,Case Keenum,0,Unsuccessful
+2018,2,2,20180915,2,Brent,18592,Nick Chubb,10,Added
+2018,2,2,20180915,12,Paul,18592,Nick Chubb,6,Unsuccessful
+2018,2,2,20180915,1,Scott,18592,Nick Chubb,4,Unsuccessful
+2018,2,2,20180915,1,Scott,60018,Saints D/ST,1,Added
+2018,2,2,20180915,6,Jeremy,14922,Mohamed Sanu,0,Added
+2018,2,2,20180916,11,Tony,13213,LeGarrette Blount,4,Added

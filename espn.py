@@ -50,7 +50,9 @@ def getdriver(leagueId=None,season=None):
     cookies = driver.get_cookies()
     for cookie in cookies:
         s.cookies.set(cookie['name'], cookie['value'])
-
+    print(s.cookies)   
+    #config['espn_s2'] = s.cookies['espn_s2']
+    #config['SWID'] = s.cookies['SWID']
     return driver, s
 
 
@@ -100,13 +102,13 @@ nfl_start_dt = {
         , 2015:datetime.strptime('20150907','%Y%m%d').date() 
         , 2016:datetime.strptime('20160905','%Y%m%d').date() 
         , 2017:datetime.strptime('20170904','%Y%m%d').date()
+        , 2018:datetime.strptime('20180903','%Y%m%d').date()
        }
 
 def week_of_season(d):
     import math
     s = datetime.strptime(d,'%Y%m%d').year
     dt = datetime.strptime(d,'%Y%m%d').date()
-
     return math.ceil((dt - nfl_start_dt[s]).days/7)
 
 #todo figure out how to load teams / years dynamically

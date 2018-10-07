@@ -41,7 +41,7 @@ def generate_charts():
 
     df = json_normalize(data, 'Items')[['COLLECTTIMESTAMP','TEAM1','TEAM1NAME','TEAM1PTS','TEAM1PROJ','TEAM2NAME','TEAM2PTS','TEAM2PROJ','SCORINGPERIOD']]
     df = df[df['SCORINGPERIOD']==week].sort_values('COLLECTTIMESTAMP', ascending=True)
-    df[['COLLECTTIMESTAMP']] = df[['COLLECTTIMESTAMP']].apply(pd.to_datetime)
+    #df[['COLLECTTIMESTAMP']] = df[['COLLECTTIMESTAMP']].apply(pd.to_datetime)
     df[['TEAM1PTS','TEAM1PROJ','TEAM2PTS','TEAM2PROJ']] = df[['TEAM1PTS','TEAM1PROJ','TEAM2PTS','TEAM2PROJ']].apply(pd.to_numeric)
 
 
@@ -54,11 +54,12 @@ def generate_charts():
         fig, ax = plt.subplots(1,1)
 
         plt.title(team1+' vs. '+team2+'\nWeek '+week)
-        ax.xaxis.set_minor_locator(md.HourLocator(interval=4))   # every 4 hours
-        ax.xaxis.set_minor_formatter(md.DateFormatter('%H:%M'))  # hours and minutes
-        ax.xaxis.set_major_locator(md.HourLocator(interval=12))    # every day
-        ax.xaxis.set_major_formatter(md.DateFormatter('\n%a'))
-        ax.set_xlim(datetime(2018, 10, 1, 20), datetime(2018, 10, 2 , 0))
+        #ax.xaxis.set_minor_locator(md.HourLocator(interval=4))   # every 4 hours
+        #ax.xaxis.set_minor_formatter(md.DateFormatter('%H:%M'))  # hours and minutes
+        #ax.xaxis.set_major_locator(md.HourLocator(interval=12))    # every day
+        #ax.xaxis.set_major_formatter(md.DateFormatter('\n%a'))
+        #ax.set_xlim(datetime(2018, 10, 4, 20), datetime(2018, 10, 5 , 0))
+        ax.xaxis.set_major_locator(plt.NullLocator())
 
         line_t1pts, = ax.plot(matchup['COLLECTTIMESTAMP'], matchup['TEAM1PTS'], 'r', label=matchup['TEAM1NAME'].unique()[0]+' PTS')
         line_t1proj, = ax.plot(matchup['COLLECTTIMESTAMP'], matchup['TEAM1PROJ'], 'r',linestyle='--', dashes=(2, 2), label=matchup['TEAM1NAME'].unique()[0]+' PROJ')

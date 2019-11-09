@@ -1,0 +1,5 @@
+params = {
+'token' : 'jgyuNE4NXwPdjzmQS568me3TyXLAL9ZCU9NkVlKj'
+#,'bot_id' : 'da0beb9ba4b78d5a57a2ed6dd4' #EC
+,'bot_id' :'4e93908dd6e03b66cbd07fc458' #Test
+}

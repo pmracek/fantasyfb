@@ -1,0 +1,23 @@
+SEASON,SCORINGPERIOD,WEEK_NM,AUCTIONDATE,TEAM,TEAMNAME,PLAYERID,PLAYERNAME,BID,BIDRESULT
+2018,6,6,20181011,2,Brent,18106,Peyton Barber,21,Added
+2018,6,6,20181011,8,Thomas,18168,Mitchell Trubisky,14,Added
+2018,6,6,20181011,9,Schwartz,18106,Peyton Barber,10,Unsuccessful
+2018,6,6,20181011,3,JMT,13311,Geno Atkins,9,Added
+2018,6,6,20181011,10,Goss,12460,Graham Gano,9,Added
+2018,6,6,20181011,4,JJ,18097,Robby Anderson,8,Added
+2018,6,6,20181011,9,Schwartz,16791,Donte Moncrief,8,Added
+2018,6,6,20181011,8,Thomas,18454,Ka'imi Fairbairn,8,Added
+2018,6,6,20181011,2,Brent,60009,Packers D/ST,7,Added
+2018,6,6,20181011,1,Scott,60009,Packers D/ST,6,Unsuccessful
+2018,6,6,20181011,4,JJ,18106,Peyton Barber,4,Unsuccessful
+2018,6,6,20181011,7,Kyle,18454,Ka'imi Fairbairn,3,Unsuccessful
+2018,6,6,20181011,12,Paul,60009,Packers D/ST,3,Unsuccessful
+2018,6,6,20181011,2,Brent,13311,Geno Atkins,3,Unsuccessful
+2018,6,6,20181011,7,Kyle,16195,Tony Jefferson,2,Added
+2018,6,6,20181011,10,Goss,18347,Damontae Kazee,2,Added
+2018,6,6,20181011,12,Paul,18106,Peyton Barber,2,Unsuccessful
+2018,6,6,20181011,12,Paul,18079,Jalen Richard,2,Added
+2018,6,6,20181011,4,JJ,18816,Josh Adams,0,Added
+2018,6,6,20181011,10,Goss,18728,Jordan Wilkins,0,Unsuccessful
+2018,6,6,20181011,10,Goss,13252,Eric Berry,0,Added
+2018,6,6,20181011,9,Schwartz,16757,Derek Carr,0,Added

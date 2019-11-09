@@ -1,0 +1,25 @@
+SEASON,SCORINGPERIOD,WEEK_NM,AUCTIONDATE,TEAM,TEAMNAME,PLAYERID,PLAYERNAME,BID,BIDRESULT
+2018,9,9,20181101,7,Kyle,8664,Ryan Fitzpatrick,51,Added
+2018,9,9,20181101,10,Goss,15807,Cordarrelle Patterson,45,Added
+2018,9,9,20181101,2,Brent,16504,Jack Doyle,24,Added
+2018,9,9,20181101,1,Scott,18582,DJ Moore,21,Added
+2018,9,9,20181101,2,Brent,8664,Ryan Fitzpatrick,19,Unsuccessful
+2018,9,9,20181101,2,Brent,16707,Dee Ford,13,Added
+2018,9,9,20181101,9,Schwartz,18582,DJ Moore,12,Unsuccessful
+2018,9,9,20181101,3,JMT,15853,Vance McDonald,11,Added
+2018,9,9,20181101,7,Kyle,16707,Dee Ford,11,Unsuccessful
+2018,9,9,20181101,12,Paul,60015,Dolphins D/ST,11,Added
+2018,9,9,20181101,8,Thomas,15853,Vance McDonald,9,Unsuccessful
+2018,9,9,20181101,9,Schwartz,18278,David Moore,8,Added
+2018,9,9,20181101,3,JMT,60013,Raiders D/ST,7,Added
+2018,9,9,20181101,9,Schwartz,18244,T.J. Watt,5,Added
+2018,9,9,20181101,9,Schwartz,60029,Panthers D/ST,5,Added
+2018,9,9,20181101,12,Paul,14012,Andy Dalton,5,Added
+2018,9,9,20181101,5,Tim,60015,Dolphins D/ST,4,Unsuccessful
+2018,9,9,20181101,9,Schwartz,15865,D.J. Swearinger,4,Added
+2018,9,9,20181101,4,JJ,60029,Panthers D/ST,0,Unsuccessful
+2018,9,9,20181101,6,Jeremy,13284,Sean Lee,0,Added
+2018,9,9,20181101,6,Jeremy,15865,D.J. Swearinger,0,Unsuccessful
+2018,9,9,20181101,1,Scott,18190,Jarrad Davis,0,Added
+2018,9,9,20181103,10,Goss,18762,Trenton Cannon,5,Added
+2018,9,9,20181104,11,Tony,14922,Mohamed Sanu,4,Added

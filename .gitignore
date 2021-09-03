@@ -5,3 +5,5 @@ data/tmp/*
 espn.ipynb
 fd_results.ipynb
 *.ini
+.vscode/launch.json
+.vscode/settings.json

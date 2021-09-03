@@ -1,3 +1,5 @@
+# Databricks notebook source
+
 from selenium import webdriver
 from selenium.common.exceptions import TimeoutException
 from selenium.common.exceptions import NoSuchElementException
@@ -13,6 +15,8 @@ import csv
 
 config = configparser.ConfigParser()
 config.read_file(open('fantasyfb.ini'))
+
+# COMMAND ----------
 
 #Use Selenium ChromeDriver to login to ESPN angular-js form buried in an iframe.  
 #Then move logged in cookies to a requests session and return both handles.
@@ -56,6 +60,7 @@ def getdriver(leagueId=None,season=None):
     return driver, s
 
 
+# COMMAND ----------
 
 def getsession(leagueId=None,season=None):
 	if leagueId is None:
@@ -66,15 +71,20 @@ def getsession(leagueId=None,season=None):
 	d.quit()
 	return s
 	
-	
+# COMMAND ----------
+
 def class_not_spacer(tag):
 	return not tag.has_attr('class') or (tag.has_attr('class') and not re.match("sectionLeadingSpacer", ' '.join(tag['class'])))  # have to use the ' '.join() syntax because tag['class'] is actually a list
+
+# COMMAND ----------
 
 def get_week_formatted(wk):
     weekpattern = re.compile('(?P<wktype>(WEEK|ROUND))\s(?P<wknum>\d+)', flags=re.IGNORECASE)
     wktype = weekpattern.search(wk).group('wktype')
     wknum = weekpattern.search(wk).group('wknum')
     return wknum if wktype.upper() == "WEEK" else "P"+wknum
+
+# COMMAND ----------
 
 def outcome(score1, score2):
         if score1 > score2:
@@ -84,13 +94,15 @@ def outcome(score1, score2):
         else:
                 outcome = 'T'
         return outcome
-    
+# COMMAND ----------
+
 def save_file(season,wk,file,data):
     import csv
     with open('data/'+str(season)+'_'+str(wk)+'_'+str(file)+'.txt', 'w', newline = '\n') as f:
             writer = csv.writer(f)
             writer.writerows(data)
 
+# COMMAND ----------
 nfl_start_dt = {
         2008:datetime.strptime('20080901','%Y%m%d').date() 
         , 2009:datetime.strptime('20090907','%Y%m%d').date() 
@@ -104,6 +116,8 @@ nfl_start_dt = {
         , 2017:datetime.strptime('20170904','%Y%m%d').date()
         , 2018:datetime.strptime('20180903','%Y%m%d').date()
        }
+
+# COMMAND ----------
 
 def week_of_season(d):
     import math

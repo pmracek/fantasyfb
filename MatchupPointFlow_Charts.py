@@ -32,7 +32,7 @@ season = datetime.now().astimezone(pytz.timezone('US/Eastern')).year
 
 r = requests.get('http://www.nfl.com/liveupdate/scorestrip/ss.xml')
 schedxml = BeautifulSoup(r.text, "html.parser")
-week = schedxml.find('gms')['w']
+week = 1 #schedxml.find('gms')['w']
 
 def _is_nfl_game_active():
     r = requests.get('http://www.nfl.com/liveupdate/scorestrip/ss.xml')
@@ -143,8 +143,8 @@ def post_to_groupme(input, imgs):
 
 
 def lambda_handler(input,context):
-    if not _is_nfl_game_active() and not _last_game_ended_recently():
-        return False
+    #if not _is_nfl_game_active() and not _last_game_ended_recently():
+    #    return False
     
     post_to_groupme(input, generate_charts())
     return True

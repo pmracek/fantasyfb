@@ -1,17 +1,13 @@
 # Databricks notebook source
-# coding: utf-8
-
-# In[1]:
-
-
 import requests
 from datetime import datetime 
-import boto3
+
 from pytz import timezone
 from decimal import Decimal
 import json
+import pandas as pd
+import pyspark.sql.functions as F
 
-dynamodb = boto3.resource('dynamodb')
 
 season = datetime.now().astimezone(timezone('US/Eastern')).year
 
@@ -33,12 +29,13 @@ t2012 = {'1':'Scott', '2':'Brent', '3':'JMT', '4':'JJ', '5':'Tim', '6':'Jeremy',
 t2016 = {'1':'Scott', '2':'Brent', '3':'JMT', '4':'JJ', '5':'Tim', '6':'Jeremy', '7':'Kyle', '8':'Thomas', '9':'Schwartz', '10':'Goss', '11':'Tony', '12':'Paul'}
 
 
-teams = {2008:pre2010, 2009:pre2010, 2010:t2010, 2011:t2011, 2012:t2012, 2013:t2012, 2014:t2012, 2015:t2012, 2016:t2016, 2017:t2016, 2018:t2016, 2019:t2016, 2020:t2016}
+teams = {2008:pre2010, 2009:pre2010, 2010:t2010, 2011:t2011, 2012:t2012, 2013:t2012, 2014:t2012, 2015:t2012, 2016:t2016, 2017:t2016, 2018:t2016, 2019:t2016, 2020:t2016, 2021:t2016}
 
-# #Only run if there is an active NFL game
+
+
 # COMMAND ----------
-# In[2]:
 
+# Only run if there is an active NFL game
 
 def _is_nfl_game_active():
     #https://site.api.espn.com/apis/fantasy/v2/games/ffl/games
@@ -52,8 +49,6 @@ def _is_nfl_game_active():
 
 
 # COMMAND ----------
-# In[32]:
-
 
 #IMPORTANT: can only look at current or future weeks.  
 #should add query param for matchupPeriodId and change class scraping logic if weeks has a declared winner 
@@ -61,22 +56,22 @@ def _is_nfl_game_active():
 #Not a high priority since I use NFL feed to verify that at least one game is in progress before getting into this method.
     
 def save_matchup_data(input):
-    table = dynamodb.Table('MatchupGameFlow')
-    
     # https://fantasy.espn.com/apis/v3/games/ffl/seasons/2020/segments/0/leagues/111414?view=modular&view=mNav&view=mMatchupScore&view=mScoreboard&view=mSettings&view=mTopPerformers&view=mTeam
     url = "https://fantasy.espn.com/apis/v3/games/ffl/seasons/" + \
             str(season) + "/segments/0/leagues/" + str(input['leagueId'])
     
     matchupPeriodIds = []
+    # https://fantasy.espn.com/apis/v3/games/ffl/seasons/2020/segments/0/leagues/111414?view=mMatchupScore&view=mMatchup
     matchupData = requests.get(url, cookies = None, params = { 'view' : 'mMatchupScore', 'view' : 'mMatchup' }).json()
     week = matchupData['scoringPeriodId']
+    
     for m in matchupData['schedule']:
         if m['matchupPeriodId'] == week:
             matchupPeriodIds.append(m['id'])
 
     matchupData = requests.get(url, cookies = None, params = { 'view' : 'mMatchupScore', 'view' : 'mScoreboard'}).json()
     
-    
+    matchups = []
     for matchup in matchupData['schedule']:
         if matchup['id'] not in matchupPeriodIds:
             continue
@@ -88,10 +83,10 @@ def save_matchup_data(input):
             'SEASON':season
             ,'SCORINGPERIOD':week
             ,'WEEK_NM':week
-            ,'COLLECTDATE':datetime.now().astimezone(timezone('US/Eastern')).strftime('%Y-%m-%d')
-            ,'DAYOFWEEK':datetime.now().astimezone(timezone('US/Eastern')).strftime('%a')
-            ,'GAMESLOT':game_slot(datetime.now().astimezone(timezone('US/Eastern')))
-            ,'COLLECTTIMESTAMP':datetime.now().astimezone(timezone('US/Eastern')).strftime("%Y-%m-%d %H:%M:%S")
+            ,'COLLECTDATE':datetime.now().strftime('%Y-%m-%d')
+            ,'DAYOFWEEK':datetime.now().strftime('%a')
+            ,'GAMESLOT':game_slot(datetime.now())
+            ,'COLLECTTIMESTAMP':datetime.now().strftime("%Y-%m-%d %H:%M:%S")
             ,'TEAM1':str(team1['teamId'])
             ,'TEAM1NAME':teams[int(season)][str(team1['teamId'])]
             ,'TEAM1PTS':team1['totalPointsLive']
@@ -110,25 +105,36 @@ def save_matchup_data(input):
             ,'TEAM2TOPSCORER':'UNKNOWN'
             ,'LEAGUEID':input['leagueId']
         }
+        matchups.append(result)
         
-        result_json = json.loads(json.dumps(result), parse_float=Decimal)
-        table.put_item(Item=result_json)
+    matchup_pdf = pd.DataFrame.from_records(matchups)
+    matchup_pdf['COLLECTTIMESTAMP']= pd.to_datetime(matchup_pdf['COLLECTTIMESTAMP'])
+    matchup_df = spark.createDataFrame(matchup_pdf)
+    matchup_df.write.saveAsTable("pm_fantasyfb.matchup_flow",mode="append")
+    return matchup_df
+    
 
 # COMMAND ----------
-# In[30]:
-
 
 def handler(input,context):
-    if not _is_nfl_game_active():
-        return False
+    #if not _is_nfl_game_active():
+    #    return False
 
-    save_matchup_data(input)
+    df = save_matchup_data(input)
+    display(df)
     return True
     
 
 # COMMAND ----------
-# In[34]:
-
 
 handler({'leagueId':'111414'},None)
+
+
+# COMMAND ----------
+
+# MAGIC %sql
+# MAGIC select * from pm_fantasyfb.matchup_flow
+
+# COMMAND ----------
+
 

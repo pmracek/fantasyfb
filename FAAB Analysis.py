@@ -13,7 +13,7 @@ input = {
     'season':'2018'
 }
 
-
+# COMMAND ----------
 # %%
 faab_files = glob.glob(os.path.join(path, "2018*faab*.txt"))
 faab_dfs = (pd.read_csv(f) for f in faab_files)
@@ -23,7 +23,7 @@ pd.to_numeric(faab_added['BID'])
 faab_added.BID.replace(0,1,inplace=True)  #zero bids screw up our PTSPERDOLLAR calc later
 faab_totals = faab_added.groupby(['TEAMNAME','TEAM','PLAYERNAME','PLAYERID'], axis=0)                         .agg({'BID':sum})                         .reset_index()
 
-
+# COMMAND ----------
 # %%
 boxscore_files = glob.glob(os.path.join(path, "2018*quickbox*.txt"))
 boxscore_dfs = (pd.read_csv(f) for f in boxscore_files)
@@ -44,12 +44,12 @@ boxscore_totals.columns = ['%s' % (b if b else a)
 starter_totals.columns = ['%s' % (b if b else a) 
                            for a, b in starter_totals.columns]
 
-
+# COMMAND ----------
 # %%
 players_file = glob.glob(os.path.join(path, "2018*players*.txt"))
 players = pd.read_csv(players_file[0])
 
-
+# COMMAND ----------
 # %%
 result = pd.merge(boxscore_totals,
                   faab_totals,                 
@@ -76,7 +76,7 @@ result['RANK_WEEKS'] = result.groupby(['POS','STARTED'])['WEEKS']              .
         
 result['RANK_AVG_PTS'] = result.groupby(['POS','STARTED'])['AVG_PTS']              .rank(method='dense',axis=0,ascending=False) 
 
-
+# COMMAND ----------
 # %%
 df = result[['POS','STARTED','RANK_PTS','RANK_PTS_PER_DOLLAR','RANK_WEEKS','RANK_AVG_PTS','PLAYERNAME','TEAMNAME','TOTAL_PTS','BID','PTSPERDOLLAR','WEEKS','AVG_PTS']]         .sort_values(['POS','STARTED','RANK_PTS'],ascending=[False,False,True])
 
@@ -90,7 +90,7 @@ df_summary = df[(df['RANK_PTS_PER_DOLLAR']<=10) | (df['RANK_PTS']<=10)]         
 
 #df[(df['RANK_WEEKS']<=5) & (df['POS']=='QB')].sort_values('RANK_WEEKS')
 
-
+# COMMAND ----------
 # %%
 writer = pd.ExcelWriter('data/2018_faab_and_player_results_data.xlsx')
 df.to_excel(writer,'ALL',index=False)
@@ -100,7 +100,7 @@ df_raw_pts.to_excel(writer,'RAW_POINTS',index=False)
 df_weeks.to_excel(writer,'WEEKS',index=False)
 writer.save()
 
-
+# COMMAND ----------
 # %%
 result = pd.merge(faab_results
                  ,players
@@ -113,7 +113,7 @@ result.to_excel(writer,'ALL',index=False)
 writer.save()
 #result[result['POS']=='WR'].sort_values(['BID'], ascending=False)
 
-
+# COMMAND ----------
 # %%
 
 

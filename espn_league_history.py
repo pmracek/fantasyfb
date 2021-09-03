@@ -35,16 +35,17 @@ def class_playertablebody(tag):
 def class_playerrow(tag):
     return tag.has_attr('class') and re.match("pncPlayerRow", ' '.join(tag['class']))  # have to use the ' '.join() syntax because tag['class'] is actually a list
 
+# COMMAND ----------
 # %% [markdown]
 # ## Create a Selenium webdriver for Chrome & Login 
 # ##### Originally used Requests but ESPN site redesign broke login form.
-
+# COMMAND ----------
 # %%
 s = getsession()
-
+# COMMAND ----------
 # %% [markdown]
 # ##  Create and Parse Soups for Weekly Team Results
-
+# COMMAND ----------
 # %%
 quickboxurls = defaultdict(list)
 
@@ -107,7 +108,7 @@ for season in seasons:
 
         save_file(season,'00','matchup_recap',results)
 
-
+# COMMAND ----------
 # %%
 for season in seasons:
     print('')
@@ -156,7 +157,7 @@ for season in seasons:
 
     save_file(season,'00','quickbox',boxresults)
 
-
+# COMMAND ----------
 # %%
 for season in seasons: 
     print('')
@@ -198,11 +199,11 @@ for season in seasons:
     save_file(season,'{0:02d}'.format(scoringPeriodId),'faab_report',bids)
     print(scoringPeriodId)    
 
-
+# COMMAND ----------
 # %%
 
 
-
+# COMMAND ----------
 # %%
 
 

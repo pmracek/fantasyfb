@@ -37,7 +37,7 @@ t2016 = {'1':'Scott', '2':'Brent', '3':'JMT', '4':'JJ', '5':'Tim', '6':'Jeremy',
 teams = {2008:pre2010, 2009:pre2010, 2010:t2010, 2011:t2011, 2012:t2012, 2013:t2012, 2014:t2012, 2015:t2012, 2016:t2016, 2017:t2016, 2018:t2016, 2019:t2016, 2020:t2016}
 
 # #Only run if there is an active NFL game
-
+# COMMAND ----------
 # In[2]:
 
 
@@ -52,7 +52,7 @@ def _is_nfl_game_active():
     return False
 
 
-
+# COMMAND ----------
 # In[32]:
 
 
@@ -115,7 +115,7 @@ def save_matchup_data(input):
         result_json = json.loads(json.dumps(result), parse_float=Decimal)
         table.put_item(Item=result_json)
 
-
+# COMMAND ----------
 # In[30]:
 
 
@@ -127,7 +127,7 @@ def handler(input,context):
     return True
     
 
-
+# COMMAND ----------
 # In[34]:
 
 

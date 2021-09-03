@@ -47,7 +47,7 @@ def _is_nfl_game_active():
         
     return active # return active
 
-
+# COMMAND ----------
 # In[60]:
 
 
@@ -73,7 +73,7 @@ def _last_game_ended_recently():
 
     return current_utc_ts<=last_game_end_utc_ts
 
-
+# COMMAND ----------
 # In[61]:
 
 
@@ -117,7 +117,7 @@ def generate_charts():
     return imgs
 
 
-
+# COMMAND ----------
 # In[62]:
 
 
@@ -138,7 +138,7 @@ def post_to_groupme(input, imgs):
         data = '{"bot_id":"'+input['bot_id']+'","text":"","attachments":[{"type":"image","url":"'+imgurl+'"}]}'
         response = requests.post('https://api.groupme.com/v3/bots/post', headers=headers_post, data=data)
 
-
+# COMMAND ----------
 
 # In[63]:
 
@@ -150,5 +150,6 @@ def lambda_handler(input,context):
     post_to_groupme(input, generate_charts())
     return True
 
+# COMMAND ----------
 lambda_handler(params,None)
 

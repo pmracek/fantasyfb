@@ -76,7 +76,7 @@ def week_of_season(d):
 
     return math.ceil((dt - nfl_start_dt[s]).days/7)
 
-
+# COMMAND ----------
 
 # In[2]:
 
@@ -93,7 +93,7 @@ teams = {2008:pre2010, 2009:pre2010, 2010:t2010, 2011:t2011, 2012:t2012, 2013:t2
 
 # ## Create a Selenium webdriver for Chrome & Login 
 # ##### Originally used Requests but ESPN site redesign broke login form.
-
+# COMMAND ----------
 # In[3]:
 
 
@@ -120,6 +120,7 @@ s = espn.getsession()
 # Team2Points
 # Team2Projected
 
+# COMMAND ----------
 # In[5]:
 
 
@@ -130,7 +131,7 @@ r = s.post(url)
 scoreboard_html = BeautifulSoup(r.text, "lxml")
 
 
-
+# COMMAND ----------
 # In[6]:
 
 
@@ -170,3 +171,4 @@ for matchup in matchups:
 
 save_file(season,week,'matchup_flow','a',results)
 
+# COMMAND ----------

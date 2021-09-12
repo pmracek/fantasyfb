@@ -1,9 +1,4 @@
 # Databricks notebook source
-# coding: utf-8
-
-# In[59]:
-
-
 import matplotlib
 matplotlib.use('Agg')
 
@@ -13,9 +8,9 @@ import pandas as pd
 import numpy as np
 from pandas.io.json import json_normalize
 from datetime import datetime,date,timedelta
-import boto3
+
 import pytz 
-from bs4 import BeautifulSoup
+#from bs4 import BeautifulSoup
 import requests
 import io
 
@@ -24,36 +19,36 @@ params = {
 ,'bot_id' :'4e93908dd6e03b66cbd07fc458' #Test
 }
 
-dynamodb = boto3.resource('dynamodb')
-table = dynamodb.Table('MatchupGameFlow')
-
 leagueId = '111414'
 season = datetime.now().astimezone(pytz.timezone('US/Eastern')).year
 
 r = requests.get('http://www.nfl.com/liveupdate/scorestrip/ss.xml')
-schedxml = BeautifulSoup(r.text, "html.parser")
+#schedxml = BeautifulSoup(r.text, "html.parser")
 week = 1 #schedxml.find('gms')['w']
 
-def _is_nfl_game_active():
-    r = requests.get('http://www.nfl.com/liveupdate/scorestrip/ss.xml')
-    schedxml = BeautifulSoup(r.text, "html.parser")
-    active = False
-    for info in schedxml.findAll('g'):        
-        gamestatus = info['q']
-        if(gamestatus != 'F'  and gamestatus != 'FO' and gamestatus != 'P'):
-            active = True  
-            break
-        
-    return active # return active
+# Only run if there is an active NFL game
+def _is_nfl_game_active(debug=False):
+    #https://site.api.espn.com/apis/fantasy/v2/games/ffl/games
+    #json.events[0].status == pre or post then false.  else true
+    #seems to only give current week games.
+    nflgames = requests.get("https://site.api.espn.com/apis/fantasy/v2/games/ffl/games").json()
+    for game in nflgames['events']:
+        if game['status'] not in ['pre','post']:
+            return True
+    if(debug):
+      return True
+    return False
 
 # COMMAND ----------
+
 # In[60]:
 
 
 def _last_game_ended_recently():
     r = requests.get('http://www.nfl.com/liveupdate/scorestrip/ss.xml')
-    schedxml = BeautifulSoup(r.text, "html.parser")
-
+    #schedxml = BeautifulSoup(r.text, "html.parser")
+    schedxml = {}
+    
     last_game_end_utc_ts = pytz.utc.localize(datetime(2000, 1, 1, 0, 0))
 
     for info in schedxml.findAll('g'):
@@ -73,15 +68,17 @@ def _last_game_ended_recently():
     return current_utc_ts<=last_game_end_utc_ts
 
 # COMMAND ----------
+
 # In[61]:
 
 
 def generate_charts():
-    data = table.scan()
+    columns = ['COLLECTTIMESTAMP','TEAM1','TEAM1NAME','TEAM1PTS','TEAM1PROJ','TEAM2NAME','TEAM2PTS','TEAM2PROJ','SCORINGPERIOD']
+    data = spark.read.table("pm_fantasyfb.matchup_flow").select(columns)
 
-    df = json_normalize(data, 'Items')[['COLLECTTIMESTAMP','TEAM1','TEAM1NAME','TEAM1PTS','TEAM1PROJ','TEAM2NAME','TEAM2PTS','TEAM2PROJ','SCORINGPERIOD']]
+    df = data.toPandas()
     df = df[df['SCORINGPERIOD']==week].sort_values('COLLECTTIMESTAMP', ascending=True)
-    #df[['COLLECTTIMESTAMP']] = df[['COLLECTTIMESTAMP']].apply(pd.to_datetime)
+    
     df[['TEAM1PTS','TEAM1PROJ','TEAM2PTS','TEAM2PROJ']] = df[['TEAM1PTS','TEAM1PROJ','TEAM2PTS','TEAM2PROJ']].apply(pd.to_numeric)
 
 
@@ -93,7 +90,7 @@ def generate_charts():
 
         fig, ax = plt.subplots(1,1)
 
-        plt.title(team1+' vs. '+team2+'\nWeek '+week)
+        plt.title(team1+' vs. '+team2+'\nWeek '+str(week))
         #ax.xaxis.set_minor_locator(md.HourLocator(interval=4))   # every 4 hours
         #ax.xaxis.set_minor_formatter(md.DateFormatter('%H:%M'))  # hours and minutes
         #ax.xaxis.set_major_locator(md.HourLocator(interval=12))    # every day
@@ -117,6 +114,7 @@ def generate_charts():
 
 
 # COMMAND ----------
+
 # In[62]:
 
 
@@ -150,5 +148,28 @@ def lambda_handler(input,context):
     return True
 
 # COMMAND ----------
+
 lambda_handler(params,None)
+
+
+# COMMAND ----------
+
+columns = ['COLLECTTIMESTAMP','TEAM1','TEAM1NAME','TEAM1PTS','TEAM1PROJ','TEAM2NAME','TEAM2PTS','TEAM2PROJ','SCORINGPERIOD']
+data = spark.read.table("pm_fantasyfb.matchup_flow").select(columns)
+
+display(data)
+
+# COMMAND ----------
+
+columns = ['COLLECTTIMESTAMP','TEAM1','TEAM1NAME','TEAM1PTS','TEAM1PROJ','TEAM2NAME','TEAM2PTS','TEAM2PROJ','SCORINGPERIOD']
+data = spark.read.table("pm_fantasyfb.matchup_flow").select(columns)
+
+df = data.toPandas()
+df = df[df['SCORINGPERIOD']==week].sort_values('COLLECTTIMESTAMP', ascending=True)
+
+df[['TEAM1PTS','TEAM1PROJ','TEAM2PTS','TEAM2PROJ']] = df[['TEAM1PTS','TEAM1PROJ','TEAM2PTS','TEAM2PROJ']].apply(pd.to_numeric)
+display(df)
+
+# COMMAND ----------
+
 

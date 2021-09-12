@@ -1,4 +1,9 @@
 # Databricks notebook source
+dbutils.widgets.dropdown("debug", "False", ["True","False"], "Debug")
+dbutils.widgets.text("leagueId", "111414", "League ID")
+
+# COMMAND ----------
+
 import requests
 from datetime import datetime 
 
@@ -37,7 +42,7 @@ teams = {2008:pre2010, 2009:pre2010, 2010:t2010, 2011:t2011, 2012:t2012, 2013:t2
 
 # Only run if there is an active NFL game
 
-def _is_nfl_game_active():
+def _is_nfl_game_active(debug=False):
     #https://site.api.espn.com/apis/fantasy/v2/games/ffl/games
     #json.events[0].status == pre or post then false.  else true
     #seems to only give current week games.
@@ -45,8 +50,10 @@ def _is_nfl_game_active():
     for game in nflgames['events']:
         if game['status'] not in ['pre','post']:
             return True
+    if(debug):
+      return True
     return False
-
+    
 
 # COMMAND ----------
 
@@ -117,24 +124,14 @@ def save_matchup_data(input):
 # COMMAND ----------
 
 def handler(input,context):
-    #if not _is_nfl_game_active():
-    #    return False
+    if not _is_nfl_game_active(debug=dbutils.widgets.get("debug")):
+        return False
 
     df = save_matchup_data(input)
-    display(df)
     return True
     
 
 # COMMAND ----------
 
-handler({'leagueId':'111414'},None)
-
-
-# COMMAND ----------
-
-# MAGIC %sql
-# MAGIC select * from pm_fantasyfb.matchup_flow
-
-# COMMAND ----------
-
+handler({'leagueId':dbutils.widgets.get("leagueId")},None)
 

@@ -1,30 +1,56 @@
 # Databricks notebook source
-import matplotlib
-matplotlib.use('Agg')
+dbutils.widgets.text("bot_id", "4e93908dd6e03b66cbd07fc458", "Groupme Bot ID")
+dbutils.widgets.text("leagueId", "111414", "League ID")
+dbutils.widgets.text("week", "2", "Week")
+
+# COMMAND ----------
 
 import matplotlib.pyplot as plt
 import matplotlib.dates as md
+import seaborn as sns
+import requests
 import pandas as pd
+
 import numpy as np
-from pandas.io.json import json_normalize
 from datetime import datetime,date,timedelta
+
+
 
 import pytz 
 #from bs4 import BeautifulSoup
-import requests
 import io
 
 params = {
 'token' : 'jgyuNE4NXwPdjzmQS568me3TyXLAL9ZCU9NkVlKj'
-,'bot_id' :'4e93908dd6e03b66cbd07fc458' #Test
+,'bot_id' : dbutils.widgets.get("bot_id")
+#,'bot_id' :'4e93908dd6e03b66cbd07fc458' #Test 
+#,'bot_id' :'da0beb9ba4b78d5a57a2ed6dd4' #Prod
 }
 
-leagueId = '111414'
+leagueId = dbutils.widgets.get("leagueId")
 season = datetime.now().astimezone(pytz.timezone('US/Eastern')).year
+
+colors = {
+ 1: 'darkred',
+ 2: 'maroon',
+ 3: 'firebrick',
+ 4: 'red',
+ 5: 'indianred',
+ 6: 'lightcoral',
+ 7: 'lightgray',
+ 8: 'silver',
+ 9: 'darkgray',
+ 10: 'gray',
+ 11: 'dimgray',
+ 12: 'black'}
+
+
+
+# COMMAND ----------
 
 r = requests.get('http://www.nfl.com/liveupdate/scorestrip/ss.xml')
 #schedxml = BeautifulSoup(r.text, "html.parser")
-week = 1 #schedxml.find('gms')['w']
+week = dbutils.widgets.get("week") #schedxml.find('gms')['w']
 
 # Only run if there is an active NFL game
 def _is_nfl_game_active(debug=False):
@@ -37,11 +63,7 @@ def _is_nfl_game_active(debug=False):
             return True
     if(debug):
       return True
-    return False
-
-# COMMAND ----------
-
-# In[60]:
+    return False# In[60]:
 
 
 def _last_game_ended_recently():
@@ -69,15 +91,12 @@ def _last_game_ended_recently():
 
 # COMMAND ----------
 
-# In[61]:
-
-
 def generate_charts():
     columns = ['COLLECTTIMESTAMP','TEAM1','TEAM1NAME','TEAM1PTS','TEAM1PROJ','TEAM2NAME','TEAM2PTS','TEAM2PROJ','SCORINGPERIOD']
-    data = spark.read.table("pm_fantasyfb.matchup_flow").select(columns)
+    data = spark.read.table("pm_fantasyfb.matchup_flow").select(columns).where("SCORINGPERIOD == {}".format(week)).orderBy("COLLECTTIMESTAMP")
 
     df = data.toPandas()
-    df = df[df['SCORINGPERIOD']==week].sort_values('COLLECTTIMESTAMP', ascending=True)
+    #df = df[df['SCORINGPERIOD']==week].sort_values('COLLECTTIMESTAMP', ascending=True)
     
     df[['TEAM1PTS','TEAM1PROJ','TEAM2PTS','TEAM2PROJ']] = df[['TEAM1PTS','TEAM1PROJ','TEAM2PTS','TEAM2PROJ']].apply(pd.to_numeric)
 
@@ -91,12 +110,12 @@ def generate_charts():
         fig, ax = plt.subplots(1,1)
 
         plt.title(team1+' vs. '+team2+'\nWeek '+str(week))
-        #ax.xaxis.set_minor_locator(md.HourLocator(interval=4))   # every 4 hours
-        #ax.xaxis.set_minor_formatter(md.DateFormatter('%H:%M'))  # hours and minutes
-        #ax.xaxis.set_major_locator(md.HourLocator(interval=12))    # every day
-        #ax.xaxis.set_major_formatter(md.DateFormatter('\n%a'))
+        ax.xaxis.set_minor_locator(md.HourLocator(interval=4))   # every 4 hours
+        ax.xaxis.set_minor_formatter(md.DateFormatter('%H:%M'))  # hours and minutes
+        ax.xaxis.set_major_locator(md.HourLocator(interval=12))    # every day
+        ax.xaxis.set_major_formatter(md.DateFormatter('\n%a'))
         #ax.set_xlim(datetime(2018, 10, 1, 20), datetime(2018, 10, 2 , 0))
-        ax.xaxis.set_major_locator(plt.NullLocator())
+        #ax.xaxis.set_major_locator(plt.NullLocator())
         
         line_t1pts, = ax.plot(matchup['COLLECTTIMESTAMP'], matchup['TEAM1PTS'], 'r', label=matchup['TEAM1NAME'].unique()[0]+' PTS')
         line_t1proj, = ax.plot(matchup['COLLECTTIMESTAMP'], matchup['TEAM1PROJ'], 'r',linestyle='--', dashes=(2, 2), label=matchup['TEAM1NAME'].unique()[0]+' PROJ')
@@ -105,7 +124,7 @@ def generate_charts():
         ax.legend(loc='best')
 
         buf = io.BytesIO()
-        plt.savefig(buf, format='png')
+        plt.savefig(buf, format='png', facecolor='white', edgecolor='none') 
         buf.seek(0)
         imgs.append(buf)
         #plt.show()
@@ -144,32 +163,13 @@ def lambda_handler(input,context):
     #if not _is_nfl_game_active() and not _last_game_ended_recently():
     #    return False
     
+    if not _is_nfl_game_active():
+        return False
+    
     post_to_groupme(input, generate_charts())
     return True
 
 # COMMAND ----------
 
 lambda_handler(params,None)
-
-
-# COMMAND ----------
-
-columns = ['COLLECTTIMESTAMP','TEAM1','TEAM1NAME','TEAM1PTS','TEAM1PROJ','TEAM2NAME','TEAM2PTS','TEAM2PROJ','SCORINGPERIOD']
-data = spark.read.table("pm_fantasyfb.matchup_flow").select(columns)
-
-display(data)
-
-# COMMAND ----------
-
-columns = ['COLLECTTIMESTAMP','TEAM1','TEAM1NAME','TEAM1PTS','TEAM1PROJ','TEAM2NAME','TEAM2PTS','TEAM2PROJ','SCORINGPERIOD']
-data = spark.read.table("pm_fantasyfb.matchup_flow").select(columns)
-
-df = data.toPandas()
-df = df[df['SCORINGPERIOD']==week].sort_values('COLLECTTIMESTAMP', ascending=True)
-
-df[['TEAM1PTS','TEAM1PROJ','TEAM2PTS','TEAM2PROJ']] = df[['TEAM1PTS','TEAM1PROJ','TEAM2PTS','TEAM2PROJ']].apply(pd.to_numeric)
-display(df)
-
-# COMMAND ----------
-
 

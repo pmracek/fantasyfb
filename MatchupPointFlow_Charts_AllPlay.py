@@ -1,5 +1,5 @@
 # Databricks notebook source
-dbutils.widgets.text("bot_id", "garbage", "Groupme Bot ID")
+dbutils.widgets.text("bot_id", "4e93908dd6e03b66cbd07fc458", "Groupme Bot ID")
 dbutils.widgets.text("leagueId", "111414", "League ID")
 
 # COMMAND ----------
@@ -170,7 +170,7 @@ def generate_charts():
 
     imgs.append(buf)
 
-
+    plt.show()
     plt.close()
     return imgs
 

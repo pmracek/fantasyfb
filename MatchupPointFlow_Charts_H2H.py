@@ -52,7 +52,12 @@ colors = {
 
 r = requests.get('http://www.nfl.com/liveupdate/scorestrip/ss.xml')
 #schedxml = BeautifulSoup(r.text, "html.parser")
-week = dbutils.widgets.get("week") #schedxml.find('gms')['w']
+
+week = spark.sql("""
+        select max(SCORINGPERIOD) as week
+        from pm_fantasyfb.matchup_flow 
+        where SEASON = year(current_date)
+        """).collect()[0]['week']
 
 # Only run if there is an active NFL game
 def _is_nfl_game_active(debug=False):

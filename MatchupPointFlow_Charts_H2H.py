@@ -1,7 +1,7 @@
 # Databricks notebook source
 dbutils.widgets.text("bot_id", "4e93908dd6e03b66cbd07fc458", "Groupme Bot ID")
 dbutils.widgets.text("leagueId", "111414", "League ID")
-dbutils.widgets.text("week", "2", "Week")
+dbutils.widgets.text("week", "3", "Week")
 
 # COMMAND ----------
 
@@ -29,6 +29,8 @@ params = {
 
 leagueId = dbutils.widgets.get("leagueId")
 season = datetime.now().astimezone(pytz.timezone('US/Eastern')).year
+
+spark.sql("SET TIME ZONE 'America/New_York'")
 
 colors = {
  1: 'darkred',
@@ -93,8 +95,8 @@ def _last_game_ended_recently():
 
 def generate_charts():
     columns = ['COLLECTTIMESTAMP','TEAM1','TEAM1NAME','TEAM1PTS','TEAM1PROJ','TEAM2NAME','TEAM2PTS','TEAM2PROJ','SCORINGPERIOD']
-    data = spark.read.table("pm_fantasyfb.matchup_flow").select(columns).where("SCORINGPERIOD == {}".format(week)).orderBy("COLLECTTIMESTAMP")
-
+    data = spark.read.table("pm_fantasyfb.matchup_flow").select(columns).where("SCORINGPERIOD == {} AND COLLECTTIMESTAMP > TIMESTAMP '2021-09-18 00:00:00'".format(week)).orderBy("COLLECTTIMESTAMP")
+    
     df = data.toPandas()
     #df = df[df['SCORINGPERIOD']==week].sort_values('COLLECTTIMESTAMP', ascending=True)
     
@@ -106,7 +108,16 @@ def generate_charts():
         matchup = df[df['TEAM1NAME']==home_team]
         team1 = matchup['TEAM1NAME'].unique()[0]
         team2 = matchup['TEAM2NAME'].unique()[0]
-
+        
+        #Thursday night and no one has scored any points yet
+        if matchup['TEAM1PTS'].tail(1).item() == 0 and matchup['TEAM2PTS'].tail(1).item() == 0:
+          continue
+        
+        #Monday night -- and maybe Sunday night -- if both teams are done.
+        if matchup['TEAM1PTS'].tail(1).item() == matchup['TEAM1PROJ'].tail(1).item() \
+              and matchup['TEAM2PTS'].tail(1).item() == matchup['TEAM2PROJ'].tail(1).item():
+          continue
+        
         fig, ax = plt.subplots(1,1)
 
         plt.title(team1+' vs. '+team2+'\nWeek '+str(week))
@@ -163,8 +174,8 @@ def lambda_handler(input,context):
     #if not _is_nfl_game_active() and not _last_game_ended_recently():
     #    return False
     
-    if not _is_nfl_game_active():
-        return False
+    #if not _is_nfl_game_active():
+    #    return False
     
     post_to_groupme(input, generate_charts())
     return True
@@ -172,4 +183,8 @@ def lambda_handler(input,context):
 # COMMAND ----------
 
 lambda_handler(params,None)
+
+
+# COMMAND ----------
+
 

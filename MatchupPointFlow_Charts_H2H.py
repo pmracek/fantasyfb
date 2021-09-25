@@ -9,6 +9,8 @@ dbutils.widgets.dropdown("force_charts", "False", ["False","True"])
 
 import matplotlib.pyplot as plt
 import matplotlib.dates as md
+from matplotlib.ticker import FuncFormatter
+        
 import seaborn as sns
 import requests
 import pandas as pd
@@ -124,7 +126,7 @@ def _last_game_ended_recently():
 
 def get_muf_data(scoringperiod):
   columns = ['COLLECTTIMESTAMP','TEAM1','TEAM1NAME','TEAM1PTS','TEAM1PROJ','TEAM2NAME','TEAM2PTS','TEAM2PROJ','SCORINGPERIOD']
-  data = spark.read.table("pm_fantasyfb.matchup_flow").select(columns).where("SCORINGPERIOD == {} AND COLLECTTIMESTAMP > TIMESTAMP '2021-09-18 00:00:00'".format(scoringperiod)).orderBy("COLLECTTIMESTAMP")
+  data = spark.read.table("pm_fantasyfb.matchup_flow").select(columns).where("SCORINGPERIOD == {}".format(scoringperiod)).orderBy("COLLECTTIMESTAMP")
 
   df = data.toPandas()
   #df = df[df['SCORINGPERIOD']==week].sort_values('COLLECTTIMESTAMP', ascending=True)
@@ -132,6 +134,9 @@ def get_muf_data(scoringperiod):
   df[['TEAM1PTS','TEAM1PROJ','TEAM2PTS','TEAM2PROJ']] = df[['TEAM1PTS','TEAM1PROJ','TEAM2PTS','TEAM2PROJ']].apply(pd.to_numeric)
   return df
 
+# COMMAND ----------
+
+   
 def generate_charts(df, force=False, show=False):    
     imgs = []
     for home_team in df['TEAM1NAME'].unique():
@@ -152,17 +157,25 @@ def generate_charts(df, force=False, show=False):
         fig, ax = plt.subplots(1,1)
 
         plt.title(team1+' vs. '+team2+'\nWeek '+str(week))
-        ax.xaxis.set_minor_locator(md.HourLocator(interval=4))   # every 4 hours
-        ax.xaxis.set_minor_formatter(md.DateFormatter('%H:%M'))  # hours and minutes
-        ax.xaxis.set_major_locator(md.HourLocator(interval=12))    # every day
-        ax.xaxis.set_major_formatter(md.DateFormatter('\n%a'))
-        #ax.set_xlim(datetime(2018, 10, 1, 20), datetime(2018, 10, 2 , 0))
-        #ax.xaxis.set_major_locator(plt.NullLocator())
+
+        N = len(matchup['COLLECTTIMESTAMP'])
+        ind = np.arange(N)
         
-        line_t1pts, = ax.plot(matchup['COLLECTTIMESTAMP'], matchup['TEAM1PTS'], 'r', label=matchup['TEAM1NAME'].unique()[0]+' PTS')
-        line_t1proj, = ax.plot(matchup['COLLECTTIMESTAMP'], matchup['TEAM1PROJ'], 'r',linestyle='--', dashes=(2, 2), label=matchup['TEAM1NAME'].unique()[0]+' PROJ')
-        line_t2pts, = ax.plot(matchup['COLLECTTIMESTAMP'], matchup['TEAM2PTS'], 'b', label=matchup['TEAM2NAME'].unique()[0]+' PTS')
-        line_t2proj, = ax.plot(matchup['COLLECTTIMESTAMP'], matchup['TEAM2PROJ'], 'b',linestyle='--', dashes=(2, 2), label=matchup['TEAM2NAME'].unique()[0]+' PROJ')
+        def format_timestamps_major(x, pos=None):
+          thisind = np.clip(int(x + 0.5), 0, N - 1)
+          return matchup['COLLECTTIMESTAMP'].iloc[thisind].strftime('%a %I:%M %p')
+        
+        formatter = FuncFormatter(format_timestamps_major)
+        ax.xaxis.set_major_formatter(formatter)
+        fig.autofmt_xdate()
+        
+        
+        line_t1pts, = ax.plot(ind, matchup['TEAM1PTS'], 'r', label=matchup['TEAM1NAME'].unique()[0]+' PTS')
+        line_t1proj, = ax.plot(ind, matchup['TEAM1PROJ'], 'r',linestyle='--', dashes=(2, 2), label=matchup['TEAM1NAME'].unique()[0]+' PROJ')
+        line_t2pts, = ax.plot(ind, matchup['TEAM2PTS'], 'b', label=matchup['TEAM2NAME'].unique()[0]+' PTS')
+        line_t2proj, = ax.plot(ind, matchup['TEAM2PROJ'], 'b',linestyle='--', dashes=(2, 2), label=matchup['TEAM2NAME'].unique()[0]+' PROJ')
+
+        
         ax.legend(loc='best')
 
         buf = io.BytesIO()

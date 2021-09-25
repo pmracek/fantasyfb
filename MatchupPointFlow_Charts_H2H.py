@@ -1,7 +1,9 @@
 # Databricks notebook source
 dbutils.widgets.text("bot_id", "4e93908dd6e03b66cbd07fc458", "Groupme Bot ID")
 dbutils.widgets.text("leagueId", "111414", "League ID")
-dbutils.widgets.text("week", "3", "Week")
+dbutils.widgets.text("week", "2", "Week")
+dbutils.widgets.dropdown("show_charts", "False", ["False","True"])
+dbutils.widgets.dropdown("force_charts", "False", ["False","True"])
 
 # COMMAND ----------
 
@@ -30,6 +32,23 @@ params = {
 leagueId = dbutils.widgets.get("leagueId")
 season = datetime.now().astimezone(pytz.timezone('US/Eastern')).year
 
+def get_week():
+  if dbutils.widgets.get("week") == "":
+    week = spark.sql("""
+          select SEASON, SCORINGPERIOD
+          FROM 
+          (
+          select SEASON, SCORINGPERIOD, ROW_NUMBER() OVER (ORDER BY SEASON DESC, SCORINGPERIOD DESC) RN
+          from pm_fantasyfb.matchup_flow 
+          )
+          WHERE RN = 1
+          """).collect()[0]['SCORINGPERIOD']
+  else:
+    week = dbutils.widgets.get("week")
+  return week
+
+week = get_week()
+
 spark.sql("SET TIME ZONE 'America/New_York'")
 
 colors = {
@@ -46,18 +65,23 @@ colors = {
  11: 'dimgray',
  12: 'black'}
 
+def str_to_bool(value):
+  FALSE_VALUES = ['false', 'no', '0']
+  TRUE_VALUES = ['true', 'yes', '1']
+  lvalue = str(value).lower()
+  if lvalue in (FALSE_VALUES): return False
+  if lvalue in (TRUE_VALUES):  return True
+  raise Exception("String value should be one of {}, but got '{}'.".format(FALSE_VALUES + TRUE_VALUES, value))
 
+show_charts = str_to_bool(dbutils.widgets.get("show_charts"))
+force_charts = str_to_bool(dbutils.widgets.get("force_charts"))
 
 # COMMAND ----------
 
 r = requests.get('http://www.nfl.com/liveupdate/scorestrip/ss.xml')
 #schedxml = BeautifulSoup(r.text, "html.parser")
 
-week = spark.sql("""
-        select max(SCORINGPERIOD) as week
-        from pm_fantasyfb.matchup_flow 
-        where SEASON = year(current_date)
-        """).collect()[0]['week']
+
 
 # Only run if there is an active NFL game
 def _is_nfl_game_active(debug=False):
@@ -98,16 +122,17 @@ def _last_game_ended_recently():
 
 # COMMAND ----------
 
-def generate_charts():
-    columns = ['COLLECTTIMESTAMP','TEAM1','TEAM1NAME','TEAM1PTS','TEAM1PROJ','TEAM2NAME','TEAM2PTS','TEAM2PROJ','SCORINGPERIOD']
-    data = spark.read.table("pm_fantasyfb.matchup_flow").select(columns).where("SCORINGPERIOD == {} AND COLLECTTIMESTAMP > TIMESTAMP '2021-09-18 00:00:00'".format(week)).orderBy("COLLECTTIMESTAMP")
-    
-    df = data.toPandas()
-    #df = df[df['SCORINGPERIOD']==week].sort_values('COLLECTTIMESTAMP', ascending=True)
-    
-    df[['TEAM1PTS','TEAM1PROJ','TEAM2PTS','TEAM2PROJ']] = df[['TEAM1PTS','TEAM1PROJ','TEAM2PTS','TEAM2PROJ']].apply(pd.to_numeric)
+def get_muf_data(scoringperiod):
+  columns = ['COLLECTTIMESTAMP','TEAM1','TEAM1NAME','TEAM1PTS','TEAM1PROJ','TEAM2NAME','TEAM2PTS','TEAM2PROJ','SCORINGPERIOD']
+  data = spark.read.table("pm_fantasyfb.matchup_flow").select(columns).where("SCORINGPERIOD == {} AND COLLECTTIMESTAMP > TIMESTAMP '2021-09-18 00:00:00'".format(scoringperiod)).orderBy("COLLECTTIMESTAMP")
 
+  df = data.toPandas()
+  #df = df[df['SCORINGPERIOD']==week].sort_values('COLLECTTIMESTAMP', ascending=True)
 
+  df[['TEAM1PTS','TEAM1PROJ','TEAM2PTS','TEAM2PROJ']] = df[['TEAM1PTS','TEAM1PROJ','TEAM2PTS','TEAM2PROJ']].apply(pd.to_numeric)
+  return df
+
+def generate_charts(df, force=False, show=False):    
     imgs = []
     for home_team in df['TEAM1NAME'].unique():
         matchup = df[df['TEAM1NAME']==home_team]
@@ -115,13 +140,14 @@ def generate_charts():
         team2 = matchup['TEAM2NAME'].unique()[0]
         
         #Thursday night and no one has scored any points yet
-        if matchup['TEAM1PTS'].tail(1).item() == 0 and matchup['TEAM2PTS'].tail(1).item() == 0:
+        if matchup['TEAM1PTS'].tail(1).item() == 0 and matchup['TEAM2PTS'].tail(1).item() == 0 and not force:
           continue
         
         #Monday night -- and maybe Sunday night -- if both teams are done.
         if matchup['TEAM1PTS'].tail(1).item() == matchup['TEAM1PROJ'].tail(1).item() \
-              and matchup['TEAM2PTS'].tail(1).item() == matchup['TEAM2PROJ'].tail(1).item():
-          continue
+              and matchup['TEAM2PTS'].tail(1).item() == matchup['TEAM2PROJ'].tail(1).item() \
+              and not force:
+           continue
         
         fig, ax = plt.subplots(1,1)
 
@@ -143,15 +169,13 @@ def generate_charts():
         plt.savefig(buf, format='png', facecolor='white', edgecolor='none') 
         buf.seek(0)
         imgs.append(buf)
-        #plt.show()
+        if show:
+          plt.show()
         plt.close()
     return imgs
 
 
 # COMMAND ----------
-
-# In[62]:
-
 
 def post_to_groupme(input, imgs):
     headers_img = {
@@ -172,23 +196,23 @@ def post_to_groupme(input, imgs):
 
 # COMMAND ----------
 
-# In[63]:
 
+#if not _is_nfl_game_active() and not _last_game_ended_recently():
+#    return False
 
-def lambda_handler(input,context):
-    #if not _is_nfl_game_active() and not _last_game_ended_recently():
-    #    return False
-    
-    #if not _is_nfl_game_active():
-    #    return False
-    
-    post_to_groupme(input, generate_charts())
-    return True
+#if not _is_nfl_game_active():
+#    return False
+df = get_muf_data(week)
+imgs = generate_charts(df,show=False, force=False)
+post_to_groupme(params, imgs)
+
 
 # COMMAND ----------
 
-lambda_handler(params,None)
+show_charts = str_to_bool(dbutils.widgets.get("show_charts"))
+force_charts = str_to_bool(dbutils.widgets.get("force_charts"))
 
+imgs = generate_charts(df,show=show_charts, force=force_charts)
 
 # COMMAND ----------
 

@@ -14,7 +14,7 @@ import pandas as pd
 import pyspark.sql.functions as F
 
 
-season = datetime.now().astimezone(timezone('US/Eastern')).year
+season = 2022
 
 def game_slot(ts):
     day = ts.strftime('%A')
@@ -34,7 +34,7 @@ t2012 = {'1':'Scott', '2':'Brent', '3':'JMT', '4':'JJ', '5':'Tim', '6':'Jeremy',
 t2016 = {'1':'Scott', '2':'Brent', '3':'JMT', '4':'JJ', '5':'Tim', '6':'Jeremy', '7':'Kyle', '8':'Thomas', '9':'Schwartz', '10':'Goss', '11':'Tony', '12':'Paul'}
 
 
-teams = {2008:pre2010, 2009:pre2010, 2010:t2010, 2011:t2011, 2012:t2012, 2013:t2012, 2014:t2012, 2015:t2012, 2016:t2016, 2017:t2016, 2018:t2016, 2019:t2016, 2020:t2016, 2021:t2016}
+teams = {2008:pre2010, 2009:pre2010, 2010:t2010, 2011:t2011, 2012:t2012, 2013:t2012, 2014:t2012, 2015:t2012, 2016:t2016, 2017:t2016, 2018:t2016, 2019:t2016, 2020:t2016, 2021:t2016, 2022:t2016}
 
 
 

@@ -6,6 +6,8 @@ dbutils.widgets.text("leagueId", "111414", "League ID")
 
 import matplotlib.pyplot as plt
 import matplotlib.dates as md
+from matplotlib.ticker import FuncFormatter
+
 import seaborn as sns
 import requests
 import pandas as pd
@@ -94,7 +96,7 @@ def generate_charts():
     columns_tm1 = ['COLLECTTIMESTAMP','TEAM1NAME','TEAM1PTS','TEAM1PROJ','SCORINGPERIOD']
     tm1 = (spark.read.table("pm_fantasyfb.matchup_flow")
              .select(columns_tm1)
-             .where("collecttimestamp > timestamp '2021-09-12 00:00:00'")
+             .where("collecttimestamp > timestamp '2022-09-08 00:00:00'")
              .withColumnRenamed("TEAM1NAME","TEAMNAME")
              .withColumnRenamed("TEAM1PTS","PTS")
              .withColumnRenamed("TEAM1PROJ","PROJ")
@@ -103,7 +105,7 @@ def generate_charts():
     columns_tm2 = ['COLLECTTIMESTAMP','TEAM2NAME','TEAM2PTS','TEAM2PROJ','SCORINGPERIOD']
     tm2 = ( spark.read.table("pm_fantasyfb.matchup_flow")
              .select(columns_tm2)
-             .where("collecttimestamp > timestamp '2021-09-12 00:00:00'")
+             .where("collecttimestamp > timestamp '2022-09-08 00:00:00'")
              .withColumnRenamed("TEAM2NAME","TEAMNAME")
              .withColumnRenamed("TEAM2PTS","PTS")
              .withColumnRenamed("TEAM2PROJ","PROJ")
@@ -142,22 +144,27 @@ def generate_charts():
 
     fig = plt.figure()
     ax = plt.subplot(111)
-
+    
+    N = len(df['COLLECTTIMESTAMP'].unique())
+    ind = np.arange(N)
+        
+    def format_timestamps_major(x, pos=None):
+        thisind = np.clip(int(x + 0.5), 0, N - 1)
+        ts_df = pd.Series(df['COLLECTTIMESTAMP'].unique())
+        return ts_df.iloc[thisind].strftime('%a %I:%M %p')
+        
+    formatter = FuncFormatter(format_timestamps_major)
+    ax.xaxis.set_major_formatter(formatter)
+    fig.autofmt_xdate()
+    
     for t in df.TEAMNAME.unique():
       plt_df = df[df["TEAMNAME"]==t]
       color = 'red' if plt_df.TOPHALF.max() == 1 else 'silver'
-      ax.plot(plt_df["COLLECTTIMESTAMP"], plt_df["PROJ"], label=t, c=plt_df['RANK'].map(colors).max())
+      ax.plot(ind, plt_df["PROJ"], label=t, c=plt_df['RANK'].map(colors).max())
 
     #Shrink current axis by 20%
     box = ax.get_position()
     ax.set_position([box.x0, box.y0, box.width * 0.9, box.height])
-
-    #ax.xaxis.set_major_locator(plt.NullLocator())
-    ax.xaxis.set_minor_locator(md.HourLocator(interval=1))   # every 4 hours
-    ax.xaxis.set_minor_formatter(md.DateFormatter('%H:%M'))  # hours and minutes
-    ax.xaxis.set_major_locator(md.HourLocator(interval=12))    # every day
-    ax.xaxis.set_major_formatter(md.DateFormatter('\n%a'))
-    #ax.set_xlim(datetime(2021, 12, 1, 20), datetime(2018, 10, 2 , 0))
 
     # Put a legend to the right of the current axis
     ax.legend(loc='center left', bbox_to_anchor=(1, .5))

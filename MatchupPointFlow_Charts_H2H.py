@@ -1,7 +1,7 @@
 # Databricks notebook source
 dbutils.widgets.text("bot_id", "4e93908dd6e03b66cbd07fc458", "Groupme Bot ID")
 dbutils.widgets.text("leagueId", "111414", "League ID")
-dbutils.widgets.text("week", "2", "Week")
+dbutils.widgets.text("week", "3", "Week")
 dbutils.widgets.dropdown("show_charts", "False", ["False","True"])
 dbutils.widgets.dropdown("force_charts", "False", ["False","True"])
 
@@ -41,7 +41,7 @@ def get_week():
           FROM 
           (
           select SEASON, SCORINGPERIOD, ROW_NUMBER() OVER (ORDER BY SEASON DESC, SCORINGPERIOD DESC) RN
-          from pm_fantasyfb.matchup_flow 
+          from pmracek.pm_fantasyfb.matchup_flow 
           )
           WHERE RN = 1
           """).collect()[0]['SCORINGPERIOD']
@@ -126,7 +126,7 @@ def _last_game_ended_recently():
 
 def get_muf_data(scoringperiod):
   columns = ['COLLECTTIMESTAMP','TEAM1','TEAM1NAME','TEAM1PTS','TEAM1PROJ','TEAM2NAME','TEAM2PTS','TEAM2PROJ','SCORINGPERIOD']
-  data = spark.read.table("pm_fantasyfb.matchup_flow").select(columns).where("SCORINGPERIOD == {}".format(scoringperiod)).orderBy("COLLECTTIMESTAMP")
+  data = spark.read.table("pmracek.pm_fantasyfb.matchup_flow").select(columns).where("SCORINGPERIOD == {} and season = {}".format(scoringperiod, season)).orderBy("COLLECTTIMESTAMP")
 
   df = data.toPandas()
   #df = df[df['SCORINGPERIOD']==week].sort_values('COLLECTTIMESTAMP', ascending=True)

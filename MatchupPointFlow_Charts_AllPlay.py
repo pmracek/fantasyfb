@@ -94,7 +94,7 @@ def _last_game_ended_recently():
 def generate_charts():
     ### Prepare data frame
     columns_tm1 = ['COLLECTTIMESTAMP','TEAM1NAME','TEAM1PTS','TEAM1PROJ','SCORINGPERIOD']
-    tm1 = (spark.read.table("pm_fantasyfb.matchup_flow")
+    tm1 = (spark.read.table("pmracek.pm_fantasyfb.matchup_flow")
              .select(columns_tm1)
              .where("collecttimestamp > timestamp '2022-09-08 00:00:00'")
              .withColumnRenamed("TEAM1NAME","TEAMNAME")
@@ -103,7 +103,7 @@ def generate_charts():
           )
 
     columns_tm2 = ['COLLECTTIMESTAMP','TEAM2NAME','TEAM2PTS','TEAM2PROJ','SCORINGPERIOD']
-    tm2 = ( spark.read.table("pm_fantasyfb.matchup_flow")
+    tm2 = ( spark.read.table("pmracek.pm_fantasyfb.matchup_flow")
              .select(columns_tm2)
              .where("collecttimestamp > timestamp '2022-09-08 00:00:00'")
              .withColumnRenamed("TEAM2NAME","TEAMNAME")
@@ -123,12 +123,12 @@ def generate_charts():
           , RANK() OVER (PARTITION BY COLLECTTIMESTAMP ORDER BY PROJ DESC) AS RANK
         FROM (
             select COLLECTTIMESTAMP, TEAM1NAME AS TEAMNAME, TEAM1PROJ AS PROJ 
-            from pm_fantasyfb.matchup_flow
+            from pmracek.pm_fantasyfb.matchup_flow
             union all
             select COLLECTTIMESTAMP, TEAM2NAME AS TEAMNAME, TEAM2PROJ AS PROJ 
-            from pm_fantasyfb.matchup_flow
+            from pmracek.pm_fantasyfb.matchup_flow
         )
-        WHERE COLLECTTIMESTAMP = (SELECT MAX(COLLECTTIMESTAMP) FROM pm_fantasyfb.matchup_flow WHERE SCORINGPERIOD = 1)
+        WHERE COLLECTTIMESTAMP = (SELECT MAX(COLLECTTIMESTAMP) FROM pmracek.pm_fantasyfb.matchup_flow WHERE SCORINGPERIOD = 1)
       )
     """)
     

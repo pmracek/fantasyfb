@@ -117,7 +117,7 @@ def save_matchup_data(input):
     matchup_pdf = pd.DataFrame.from_records(matchups)
     matchup_pdf['COLLECTTIMESTAMP']= pd.to_datetime(matchup_pdf['COLLECTTIMESTAMP'])
     matchup_df = spark.createDataFrame(matchup_pdf)
-    matchup_df.write.saveAsTable("pm_fantasyfb.matchup_flow",mode="append")
+    matchup_df.write.saveAsTable("pmracek.pm_fantasyfb.matchup_flow",mode="append")
     return matchup_df
     
 

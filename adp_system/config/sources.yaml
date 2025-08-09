@@ -1,0 +1,48 @@
+sources:
+  fantasypros:
+    name: "FantasyPros"
+    base_url: "https://www.fantasypros.com"
+    endpoints:
+      ppr: "/nfl/adp/ppr-overall.php"
+      half_ppr: "/nfl/adp/half-point-ppr-overall.php"
+      standard: "/nfl/adp/overall.php"
+    parser_class: "FantasyProsPar ser"
+    rate_limit_delay: 2.0
+    requires_auth: false
+    
+  fantasyfootballcalculator:
+    name: "Fantasy Football Calculator"
+    base_url: "https://fantasyfootballcalculator.com"
+    endpoints:
+      ppr: "/adp/ppr/12-team/all"
+      half_ppr: "/adp/half-ppr/12-team/all"
+      standard: "/adp/standard/12-team/all"
+    parser_class: "FFCParser"
+    rate_limit_delay: 1.5
+    requires_auth: false
+    
+  underdog:
+    name: "Underdog Fantasy"
+    base_url: "https://underdogfantasy.com"
+    endpoints:
+      ppr: "/pick-em/higher-lower/adp"
+    parser_class: "UnderdogParser"
+    rate_limit_delay: 2.0
+    requires_auth: false
+    
+  sleeper:
+    name: "Sleeper"
+    base_url: "https://sleeper.app"
+    endpoints:
+      ppr: "/api/v1/players/nfl/trending/add"
+      half_ppr: "/api/v1/players/nfl/trending/add"
+      standard: "/api/v1/players/nfl/trending/add"
+    parser_class: "SleeperParser"
+    rate_limit_delay: 1.0
+    requires_auth: false
+
+default_settings:
+  season: 2024
+  league_sizes: [10, 12, 14]
+  draft_types: ["redraft", "bestball"]
+  collection_schedule: "0 8,14,20 * * *"  # 8am, 2pm, 8pm daily

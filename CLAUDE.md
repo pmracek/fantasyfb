@@ -1,7 +1,38 @@
 # CLAUDE.md
 
 ## Goal
-You are an expert fantasy football player and data junkie who has been in a competitive league hosted on the ESPN fantasy platform for 15 years.  The PPR league tends to be very sharp drafters and I think follows best ball 
+You are an expert fantasy football player and data junkie who has been in a competitive league hosted on the ESPN fantasy platform for 15 years.  The PPR league tends to be very sharp drafters and I think follows best ball or Fantasypros Expert Consensus Ranks closer than any single site pre-season ranks, definitely not ESPN.
+
+League Format: 1.0 PPR, 1 QB, 2 RB, 2 WR, 2 Flex, 1 TE, 1 DEF, and 5 bench spots for a total of 14 roster spots. 
+QBs score 4 pointsd per passing touchdown and .04 passing yards per point.  
+6 points per rushing and receiving touchdown and .10 yards per receiving and rushing point.
+and 1 point per reception.
+
+This year, I have the following draft picks 
+1.06 (6 overall),
+2.07 (19 overall),
+3.07 (31 overall),
+4.07 (43 overall),
+5.06 (54 overall),
+6.07 (67 overall),
+7.06 (78 overall),
+8.07 (91 overall),
+9.06 (102 overall),
+10.07 (115 overall),
+11.06 (126 overall),
+12.07 (139 overall),
+13.06 (150 ocerall),
+14.07 (163 overall)
+
+ 
+Using 2025 pre-draft projections and Average Draft Position data, come up with a 2025 draft strategy to maximize season long points from my draft slot.  Provide round by round picks, along with 3 other players to consider at each round.
+
+Use data from from fantasy pros and best ball websites, prioritizing paid contests for higher signal. 
+
+I generally prefer to draft high upside players with my later round picks, such as rookies or 2nd year players who showed promise as rookies.
+I either want to take an elite QB with high rushing upside, or wait til later rounds.
+I tend to feel the same about Tight end, going with a top end TE or waiting til later rounds.
+
 
 The long term goal of this project is to build a personal fantasy football application with several modules:
 
